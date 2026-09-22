@@ -1,0 +1,20 @@
+{
+  "_help": "Thong tin dung chung cho ca website. Sua o day roi chay 'node build.js' la moi trang tu cap nhat. KHONG sua truc tiep cac file .html o thu muc goc (chung la file tu sinh).",
+
+  "brand": "Mực In Trường Phát",
+  "brandShort": "Trường Phát",
+  "domain": "napmucnhanh24h.com",
+  "siteUrl": "https://napmucnhanh24h.com",
+  "tagline": "Nạp mực – sửa máy in tận nơi TP.HCM, 30 phút có mặt",
+
+  "hotlineDisplay": "0908.327.123",
+  "hotlineTel": "0908327123",
+  "hotline2Display": "0819.007.394",
+  "hotline2Tel": "0819007394",
+  "zaloTel": "0908327123",
+  "email": "icontactvina@gmail.com",
+
+  "addressFull": "TP. Hồ Chí Minh (phục vụ tận nơi toàn bộ 24 quận huyện)",
+  "openingHours": "Mo-Su 07:00-21:00",
+  "priceFrom": "90.000đ"
+}

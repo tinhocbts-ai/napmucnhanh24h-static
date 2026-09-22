@@ -1,0 +1,11 @@
+{
+  "name": "napmucnhanh24h-static",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "parse": "node tools/parse-rewrites.js",
+    "build": "node build.js",
+    "build:prod": "cross-env NOINDEX=0 node build.js",
+    "serve": "node serve.js"
+  }
+}
