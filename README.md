@@ -43,11 +43,17 @@ rồi thêm file `CNAME` chứa `napmucnhanh24h.com` và trỏ DNS về GitHub P
 | `assets/img/` | Ảnh thật tải về từ site cũ (37 ảnh). |
 | `build.js` | Bộ dựng site. **File `.html` ở thư mục gốc là tự sinh — không sửa tay.** |
 
-## Phạm vi hiện tại & việc còn lại
+## Phạm vi
 
-- **Đã dựng:** 20 trang dịch vụ (nạp mực Q1–Q11, Bình Tân/Thạnh, Tân Bình/Phú, Phú Nhuận,
-  Bình Chánh, bảng giá, sửa máy in, phân biệt hộp mực/drum) + trang chủ = **21 trang**.
-  Phủ ~43 click/3 tháng trong GSC.
-- **Còn thiếu:** ~200 bài blog cũ (corel x7, lỗi máy photo Ricoh/Toshiba, spooler…) ~156 click/3 tháng.
-  Nội dung đầy đủ nằm trong WordPress; cần **export All content (.xml)** sau khi host được phục hồi,
-  rồi bổ sung vào `data/rewrites/` và build lại — pipeline đã sẵn sàng tái dùng.
+- **78 trang tĩnh:** 21 bản rewrite tay (dịch vụ quận + bảng giá + sửa máy in) + 75 trang kéo full
+  từ WordPress (47 bài blog + 28 trang) — gộp theo slug, bản rewrite tay ưu tiên — + mục lục Kiến thức.
+- Giữ nguyên 100% URL cũ (lấy từ field `link` của WP). Chỉ liên hệ, đã loại toàn bộ trang WooCommerce
+  (cart/checkout/tài khoản…). Ảnh: 182 file tải về local từ host.
+- **Nguồn WP:** `data/wp-export/_clean.json` (snapshot REST toàn bộ nội dung, chạy `tools/from-wp.js`
+  để tái tạo). Kéo lại khi cần: xem `tools/` — REST API `/wp-json/wp/v2/{posts,pages}` + Application Password.
+
+### Cập nhật nội dung
+- Trang dịch vụ (chất lượng cao): sửa `data/rewrites/*__rewrite.md` → `node tools/parse-rewrites.js`.
+- Bài blog cũ: sửa `data/wp-export/_clean.json` (hoặc kéo lại từ WP) → `node tools/from-wp.js`.
+- Rồi `node build.js`. Bài mất hẳn không cứu được: `cach-cai-dat-corel-x7-crack-vinh-vien` (24 click,
+  bài crack — cân nhắc có nên viết lại không).

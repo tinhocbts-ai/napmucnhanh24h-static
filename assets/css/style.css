@@ -91,3 +91,13 @@ figure { margin: 0 0 18px; }
   .sticky-call { left: auto; right: 24px; bottom: 24px; border-radius: 999px; padding: 14px 24px; }
   body { padding-bottom: 0; }
 }
+
+/* CTA box cuoi bai blog + muc luc kien thuc */
+.cta-box { margin: 28px 0 8px; padding: 16px 18px; background: var(--brand-soft); border-left: 5px solid var(--brand-light); border-radius: 0 12px 12px 0; }
+.cta-box p { margin: 0 0 6px; }
+.cta-nums { font-size: 1.25rem; font-weight: 800; }
+.cta-nums a { text-decoration: none; }
+.post-list { list-style: none; padding: 0; }
+.post-list li { padding: 10px 0; border-bottom: 1px solid var(--line); }
+.post-list a { text-decoration: none; font-weight: 600; }
+.post-list a:hover { text-decoration: underline; }
