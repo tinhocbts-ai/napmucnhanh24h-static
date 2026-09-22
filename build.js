@@ -66,6 +66,48 @@ function districtLinks(root) {
     .map(([s, n]) => '<li><a href="' + root + s + '/">Nạp mực ' + n + '</a></li>').join('\n');
 }
 
+// --- Menu dong (dropdown) ---
+const titleOf = slug => { const p = pages.find(x => x.slug === slug); return p ? p.title.replace(/\s*[|–-].*$/, '').trim() : slug; };
+const NAV_GROUPS = [
+  { label: 'Nạp mực máy in', items: [
+    ['bang-gia-nap-muc-may-photo', 'Bảng giá nạp mực'],
+    ['nap-muc-may-in-laser-mau', 'Nạp mực laser màu'],
+    ...Object.entries(DISTRICTS).map(([s, n]) => [s, 'Nạp mực ' + n]),
+    ['muc-may-in-quan-12-hcm', 'Nạp mực Quận 12'],
+    ['nap-muc-may-in-tai-nha', 'Nạp mực tại nhà']
+  ] },
+  { label: 'Sửa chữa', items: [
+    ['sua-may-in-tan-noi-tphcm', 'Sửa máy in tận nơi'],
+    ['sua-may-photocopy', 'Sửa máy photocopy'],
+    ['sua-may-in-bill', 'Sửa máy in bill'],
+    ['cac-loi-may-in-thuong-gap', 'Các lỗi máy in thường gặp'],
+    ['danh-sach-may-in-ho-tro-reset', 'Máy in hỗ trợ reset']
+  ] },
+  { label: 'Mực & Linh kiện', items: [
+    ['hop-muc-zin-lk', 'Hộp mực Zin'],
+    ['bom-muc-may-in-tan-binh', 'Bơm mực Tân Bình'],
+    ['thay-muc-may-in-tan-binh', 'Thay mực Tân Bình'],
+    ['mua-may-in-cu-gia-cao', 'Mua máy in cũ giá cao'],
+    ['cho-thue-may-photocopy', 'Cho thuê máy photocopy'],
+    ['phan-biet-hop-muc-va-cum-drum', 'Phân biệt hộp mực & drum']
+  ] }
+];
+
+function buildNav(root) {
+  let html = '<a href="' + (root || './') + '">Trang chủ</a>\n';
+  for (const g of NAV_GROUPS) {
+    const items = g.items.filter(([s]) => known.has(s));
+    if (!items.length) continue;
+    html += '<details class="nav-dd"><summary>' + g.label + '</summary><div class="nav-panel">' +
+      items.map(([s, n]) => '<a href="' + root + s + '/">' + n + '</a>').join('') +
+      '</div></details>\n';
+  }
+  html += '<a href="' + root + KIENTHUC + '/">Kiến thức</a>\n';
+  if (known.has('gioi-thieu')) html += '<a href="' + root + 'gioi-thieu/">Giới thiệu</a>\n';
+  html += '<a href="' + root + (known.has('lien-he') ? 'lien-he/' : '') + '" class="nav-cta-link">Liên hệ</a>\n';
+  return html;
+}
+
 function resolveInternal(pth, root, attrs, text) {
   const slug = pth.replace(/^\/+|\/+$/g, '').split('?')[0];
   if (slug === '') return '<a href="' + (root || './') + '"' + attrs + '>' + text + '</a>';
@@ -108,7 +150,7 @@ function layout(o) {
     '  <meta property="og:description" content="' + esc(o.description) + '">\n' +
     '  <meta property="og:locale" content="vi_VN">\n' +
     '  <link rel="stylesheet" href="' + root + 'assets/css/style.css">\n</head>\n<body>\n' +
-    tpl(headerTpl, root) + '\n<main class="wrap">\n' + o.bodyHtml + '\n</main>\n' +
+    tpl(headerTpl, root).replace('{{NAV}}', buildNav(root)) + '\n<main class="wrap">\n' + o.bodyHtml + '\n</main>\n' +
     tpl(footerTpl, root).replace('{{DISTRICT_LINKS}}', districtLinks(root)) + ld + '\n</body>\n</html>\n';
 }
 
@@ -131,8 +173,20 @@ for (const p of pages) {
     const grid = '<h2 id="khu-vuc">Nạp mực máy in theo quận tại TP.HCM</h2>\n<ul class="district-grid">\n' +
       Object.entries(DISTRICTS).filter(([s]) => known.has(s))
         .map(([s, n]) => '<li><a href="' + s + '/">Nạp mực máy in ' + n + '</a></li>').join('\n') +
-      '\n</ul>\n<p style="text-align:center;margin-top:8px"><a class="btn btn-ghost" href="' + KIENTHUC + '/">Xem kiến thức &amp; thủ thuật máy in →</a></p>';
-    body = hero + '\n' + body + '\n' + grid;
+      '\n</ul>';
+    // Dich vu khac
+    const svc = [['sua-may-in-tan-noi-tphcm', 'Sửa máy in tận nơi'], ['sua-may-photocopy', 'Sửa máy photocopy'],
+      ['bang-gia-nap-muc-may-photo', 'Bảng giá nạp mực'], ['nap-muc-may-in-laser-mau', 'Nạp mực laser màu'],
+      ['hop-muc-zin-lk', 'Hộp mực Zin chính hãng'], ['mua-may-in-cu-gia-cao', 'Mua máy in cũ giá cao'],
+      ['cho-thue-may-photocopy', 'Cho thuê máy photocopy'], ['danh-sach-may-in-ho-tro-reset', 'Máy in hỗ trợ reset']].filter(([s]) => known.has(s));
+    const svcHtml = '<h2>Dịch vụ khác của Trường Phát</h2>\n<ul class="district-grid">\n' +
+      svc.map(([s, n]) => '<li><a href="' + s + '/">' + n + '</a></li>').join('\n') + '\n</ul>';
+    // Kien thuc moi
+    const postList = pages.filter(p => p.type === 'post').slice(0, 8);
+    const ktHtml = '<h2>Kiến thức &amp; thủ thuật máy in</h2>\n<ul class="post-list">\n' +
+      postList.map(p => '<li><a href="' + p.slug + '/">' + p.title + '</a></li>').join('\n') +
+      '\n</ul>\n<p style="margin-top:6px"><a class="btn btn-ghost" href="' + KIENTHUC + '/">Xem tất cả bài viết →</a></p>';
+    body = hero + '\n' + body + '\n' + grid + '\n' + svcHtml + '\n' + ktHtml;
   } else if (p.slug !== KIENTHUC) {
     // trang con: them H1 neu chua co (bai WP thuong bat dau bang <p>)
     if (!/^<h1/i.test(body.trim()) && !/<h1[ >]/i.test(body)) {

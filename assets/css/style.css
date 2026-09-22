@@ -34,10 +34,31 @@ img { max-width: 100%; height: auto; border-radius: var(--radius); display: bloc
 .header-call-label { display: block; font-size: .72rem; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .06em; }
 .header-call-num { font-size: 1.2rem; font-weight: 800; }
 .site-nav { background: var(--bg-soft); border-bottom: 1px solid var(--line); }
-.nav-inner { display: flex; gap: 4px; overflow-x: auto; padding-top: 6px; padding-bottom: 6px; }
-.nav-inner a { white-space: nowrap; padding: 8px 12px; border-radius: 8px; text-decoration: none; color: var(--ink); font-size: .93rem; font-weight: 600; }
-.nav-inner a:hover { background: #fff; }
-.nav-inner .nav-cta { background: var(--brand); color: #fff; }
+.nav-inner { display: flex; flex-wrap: wrap; align-items: center; gap: 2px; padding-top: 6px; padding-bottom: 6px; }
+.nav-inner > a, .nav-dd > summary { white-space: nowrap; padding: 9px 12px; border-radius: 8px; text-decoration: none; color: var(--ink); font-size: .93rem; font-weight: 600; cursor: pointer; list-style: none; }
+.nav-inner > a:hover, .nav-dd > summary:hover { background: #fff; }
+.nav-dd > summary::-webkit-details-marker { display: none; }
+.nav-dd > summary::after { content: " ▾"; color: var(--brand); font-size: .8em; }
+.nav-inner .nav-cta-link { background: var(--brand); color: #fff; margin-left: auto; }
+.nav-inner .nav-cta-link:hover { background: var(--brand-light); color: #fff; }
+.nav-dd { position: relative; }
+.nav-panel { display: flex; flex-direction: column; }
+.nav-panel a { padding: 9px 14px; text-decoration: none; color: var(--ink); font-size: .9rem; border-radius: 6px; }
+.nav-panel a:hover { background: var(--brand-soft); color: var(--brand); }
+@media (min-width: 820px) {
+  .nav-dd[open] > summary { background: #fff; }
+  .nav-panel {
+    position: absolute; top: 100%; left: 0; z-index: 40; min-width: 240px;
+    background: #fff; border: 1px solid var(--line); border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.12); padding: 6px; margin-top: 4px;
+  }
+}
+@media (max-width: 819px) {
+  .nav-panel { background: #fff; border-radius: 8px; margin: 2px 0 6px; padding: 4px; border: 1px solid var(--line); width: 100%; }
+  .nav-dd { width: 100%; }
+  .nav-dd > summary { display: block; }
+  .nav-inner .nav-cta-link { margin-left: 0; width: 100%; text-align: center; }
+}
 
 /* noi dung */
 main { padding: 24px 0 40px; }
