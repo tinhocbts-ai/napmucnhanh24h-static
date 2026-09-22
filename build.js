@@ -43,6 +43,8 @@ const DISTRICTS = {
 };
 const KIENTHUC = 'kien-thuc';
 const known = new Set(pages.map(p => p.slug).concat([KIENTHUC]));
+const isDistrict = slug => Object.prototype.hasOwnProperty.call(DISTRICTS, slug) ||
+  /^(nap-muc|muc-may-in|bom-muc|thay-muc|nap-muc-in)/.test(slug);
 const haveImg = new Set(fs.readdirSync(path.join(ROOT, 'assets', 'img')));
 const missingLinks = new Map();
 const rootFor = slug => slug ? '../'.repeat(slug.split('/').length) : '';
@@ -116,7 +118,7 @@ function resolveInternal(pth, root, attrs, text) {
   return text; // trang khong ton tai -> bo the <a>, giu chu
 }
 
-function localize(html, root) {
+function localize(html, root, altBase) {
   // placeholder tu tools/from-wp.js
   html = html.replace(/__ROOT__/g, root);
   html = html.replace(/<a([^>]*?)href="__WP__\/([^"]*)"([^>]*)>([\s\S]*?)<\/a>/gi,
@@ -132,23 +134,49 @@ function localize(html, root) {
   // bo the <img> tro toi anh khong con file local (da bi xoa tren host cu)
   html = html.replace(/<img\b[^>]*\bsrc="([^"]*?assets\/img\/([^"\/]+))"[^>]*>/gi,
     (m, src, file) => haveImg.has(file) ? m : '');
+  // dien alt rong: lay tu ten file, else altBase (h1 trang)
+  html = html.replace(/<img\b([^>]*?)\balt=""([^>]*)>/gi, (m, pre, post) => {
+    const file = (m.match(/src="[^"]*assets\/img\/([^"\/?]+)/i) || [])[1] || '';
+    let alt = file.replace(/\.[a-z0-9]+$/i, '').replace(/[-_]\d+x\d+$/i, '').replace(/[-_]\d+$/,'')
+      .replace(/[-_]+/g, ' ').replace(/\b\w/g, c => c.toUpperCase()).trim();
+    if (alt.length < 6) alt = altBase || cfg.brand;
+    return '<img' + pre + 'alt="' + alt.slice(0, 90).replace(/"/g, '') + '"' + post + '>';
+  });
   return html;
+}
+
+function clampDesc(s) {
+  s = (s || '').trim();
+  if (s.length <= 160) return s;
+  let cut = s.slice(0, 158);
+  cut = cut.slice(0, cut.lastIndexOf(' '));
+  return cut.replace(/[,.;:–-]\s*$/, '') + '…';
 }
 
 function layout(o) {
   const root = rootFor(o.slug);
+  o.description = clampDesc(o.description);
   const esc = s => (s || '').replace(/"/g, '&quot;');
   const canonical = NOINDEX ? '' : '\n  <link rel="canonical" href="' + cfg.siteUrl + '/' + (o.slug ? o.slug + '/' : '') + '">';
   const robots = NOINDEX ? '\n  <meta name="robots" content="noindex,nofollow">' : '';
-  const ld = o.schema ? '\n<script type="application/ld+json">' + JSON.stringify(o.schema) + '</script>' : '';
+  const schemas = [].concat(o.schema || []).filter(Boolean);
+  const ld = schemas.length ? '\n' + schemas.map(s => '<script type="application/ld+json">' + JSON.stringify(s) + '</script>').join('\n') : '';
+  const ogImg = o.ogImage || (cfg.siteUrl + '/assets/img/og-default.jpg');
   return '<!doctype html>\n<html lang="vi">\n<head>\n' +
     '  <meta charset="utf-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1">\n' +
     '  <title>' + o.title + '</title>\n' +
     '  <meta name="description" content="' + esc(o.description) + '">' + robots + canonical + '\n' +
-    '  <meta property="og:type" content="website">\n' +
+    '  <meta property="og:type" content="' + (o.ogType || 'website') + '">\n' +
     '  <meta property="og:title" content="' + esc(o.title) + '">\n' +
     '  <meta property="og:description" content="' + esc(o.description) + '">\n' +
+    '  <meta property="og:image" content="' + ogImg + '">\n' +
+    '  <meta property="og:url" content="' + cfg.siteUrl + '/' + (o.slug ? o.slug + '/' : '') + '">\n' +
     '  <meta property="og:locale" content="vi_VN">\n' +
+    '  <meta property="og:site_name" content="' + cfg.brand + '">\n' +
+    '  <meta name="twitter:card" content="summary_large_image">\n' +
+    '  <meta name="twitter:title" content="' + esc(o.title) + '">\n' +
+    '  <meta name="twitter:description" content="' + esc(o.description) + '">\n' +
+    '  <meta name="twitter:image" content="' + ogImg + '">\n' +
     '  <link rel="stylesheet" href="' + root + 'assets/css/style.css">\n</head>\n<body>\n' +
     tpl(headerTpl, root).replace('{{NAV}}', buildNav(root)) + '\n<main class="wrap">\n' + o.bodyHtml + '\n</main>\n' +
     tpl(footerTpl, root).replace('{{DISTRICT_LINKS}}', districtLinks(root)) + ld + '\n</body>\n</html>\n';
@@ -162,7 +190,7 @@ function write(file, content) {
 let count = 0;
 for (const p of pages) {
   const root = rootFor(p.slug);
-  let body = localize(p.html, root);
+  let body = localize(p.html, root, p.h1 || p.title);
 
   if (!p.slug) {
     const hero = '<section class="hero">\n  <h1>' + p.h1 + '</h1>\n  <p>' + p.description + '</p>\n' +
@@ -201,19 +229,41 @@ for (const p of pages) {
     }
   }
 
-  let schema = p.schema;
-  if (!schema && !p.slug) schema = {
+  // og:image = anh dau tien trong bai (tuyet doi), else default
+  const firstImg = (body.match(/<img[^>]+src="([^"]*assets\/img\/[^"]+)"/i) || [])[1];
+  const ogImage = firstImg ? cfg.siteUrl + '/' + firstImg.replace(/^(\.\.\/)+/, '') : null;
+
+  const schemaList = [];
+  if (p.schema) schemaList.push(p.schema);
+  else if (!p.slug) schemaList.push({
     '@context': 'https://schema.org', '@type': 'LocalBusiness', name: cfg.brand, description: cfg.tagline,
     telephone: '+84' + cfg.hotlineTel.slice(1), email: cfg.email, url: cfg.siteUrl,
     areaServed: 'Thành phố Hồ Chí Minh', openingHours: cfg.openingHours, priceRange: 'từ ' + cfg.priceFrom
-  };
-  if (!schema && p.type === 'post') schema = {
+  });
+  else if (p.type === 'post') schemaList.push({
     '@context': 'https://schema.org', '@type': 'Article', headline: p.title,
-    description: p.description, publisher: { '@type': 'Organization', name: cfg.brand }, inLanguage: 'vi'
-  };
+    description: p.description, image: ogImage || undefined,
+    publisher: { '@type': 'Organization', name: cfg.brand, telephone: '+84' + cfg.hotlineTel.slice(1) },
+    mainEntityOfPage: cfg.siteUrl + '/' + p.slug + '/', inLanguage: 'vi'
+  });
+  else schemaList.push({
+    '@context': 'https://schema.org', '@type': isDistrict(p.slug) ? 'Service' : 'WebPage',
+    name: p.title, description: p.description, url: cfg.siteUrl + '/' + p.slug + '/',
+    ...(isDistrict(p.slug) ? { serviceType: 'Nạp mực máy in', areaServed: 'TP.HCM',
+      provider: { '@type': 'LocalBusiness', name: cfg.brand, telephone: '+84' + cfg.hotlineTel.slice(1) } } : {})
+  });
+  // BreadcrumbList cho moi trang con
+  if (p.slug) schemaList.push({
+    '@context': 'https://schema.org', '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Trang chủ', item: cfg.siteUrl + '/' },
+      { '@type': 'ListItem', position: 2, name: p.h1 || p.title, item: cfg.siteUrl + '/' + p.slug + '/' }
+    ]
+  });
 
   write(path.join(ROOT, p.slug ? path.join(p.slug, 'index.html') : 'index.html'),
-    layout({ slug: p.slug, title: p.title, description: p.description, bodyHtml: body, schema: schema }));
+    layout({ slug: p.slug, title: p.title, description: p.description, bodyHtml: body,
+      schema: schemaList, ogImage: ogImage, ogType: p.type === 'post' ? 'article' : 'website' }));
   count++;
 }
 
@@ -226,8 +276,16 @@ const ktBody = '<h1>Kiến thức &amp; thủ thuật máy in</h1>\n' +
   '\n</ul>';
 write(path.join(ROOT, KIENTHUC, 'index.html'), layout({
   slug: KIENTHUC, title: 'Kiến thức & thủ thuật máy in | ' + cfg.brand,
-  description: 'Hướng dẫn xử lý lỗi máy in, reset mực, mẹo dùng máy photocopy từ ' + cfg.brand + '.',
-  bodyHtml: ktBody, schema: null
+  description: 'Tổng hợp hướng dẫn xử lý lỗi máy in, reset mực, mẹo dùng máy in và photocopy từ kỹ thuật ' + cfg.brand + '.',
+  bodyHtml: ktBody,
+  schema: [
+    { '@context': 'https://schema.org', '@type': 'CollectionPage', name: 'Kiến thức & thủ thuật máy in',
+      url: cfg.siteUrl + '/' + KIENTHUC + '/', isPartOf: { '@type': 'WebSite', name: cfg.brand, url: cfg.siteUrl } },
+    { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Trang chủ', item: cfg.siteUrl + '/' },
+      { '@type': 'ListItem', position: 2, name: 'Kiến thức', item: cfg.siteUrl + '/' + KIENTHUC + '/' }
+    ] }
+  ]
 }));
 count++;
 
