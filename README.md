@@ -18,6 +18,7 @@ chạy trên GitHub Pages, dùng chung tài khoản `tinhocbts-ai` với repo `t
 
 ```bash
 node tools/parse-rewrites.js   # doc data/rewrites/*.md -> data/pages.json
+python tools/optimize-images.py  # (khi them anh) tao .webp + data/img-meta.json (width/height)
 node build.js                  # dung toan bo HTML tinh + sitemap (mac dinh: noindex, cho github.io)
 node serve.js                  # xem thu: http://localhost:8124
 ```
@@ -35,7 +36,9 @@ rồi thêm file `CNAME` chứa `napmucnhanh24h.com` và trỏ DNS về GitHub P
 
 | Đường dẫn | Vai trò |
 |---|---|
-| `site.config.json` | Thông tin dùng chung (brand, hotline, email). Sửa ở đây rồi build lại. |
+| `site.config.json` | Thông tin dùng chung (brand, hotline, email, giờ mở cửa). Sửa ở đây rồi build lại. |
+| `data/seo-overrides.json` | Ghi đè title / meta description theo slug (ưu tiên hơn nguồn rewrite + WP). |
+| `data/img-meta.json` | Kích thước + bản WebP của ảnh — sinh bởi `tools/optimize-images.py`. |
 | `data/rewrites/*__rewrite.md` | Nguồn nội dung từng trang (đã duyệt). |
 | `data/pages.json` | File trung gian do `parse-rewrites.js` sinh ra. |
 | `partials/header.html`, `footer.html` | Header/footer dùng chung. |

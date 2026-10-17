@@ -122,3 +122,5 @@ figure { margin: 0 0 18px; }
 .post-list li { padding: 10px 0; border-bottom: 1px solid var(--line); }
 .post-list a { text-decoration: none; font-weight: 600; }
 .post-list a:hover { text-decoration: underline; }
+.related { margin-top: 32px; padding-top: 8px; border-top: 2px solid var(--line); }
+.related h2 { font-size: 1.15rem; }

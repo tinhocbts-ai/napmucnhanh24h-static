@@ -1,0 +1,215 @@
+{
+  "_help": "Ghi de title / meta description theo slug (uu tien hon pages.json va pages-wp.json). Title <= 65 ky tu, description 120-158 ky tu. Sua o day roi chay 'node build.js'.",
+  "bang-tra-ma-loi-sc-code-model-aficio-1018-2018-2020-2000le-2500": {
+    "title": "Bảng Mã Lỗi SC Ricoh Aficio 1018, 2018, 2020, 2500 | Trường Phát",
+    "description": "Tra cứu mã lỗi SC máy photocopy Ricoh Aficio 1018, 2018, 2020, 2000Le, 2500: ý nghĩa từng code, nguyên nhân và cách khắc phục. Cần thợ gọi 0908.327.123."
+  },
+  "bang-tra-ma-muc-tat-ca-cac-dong-may-in-laser-trang-den-2": {
+    "title": "Bảng Tra Mã Mực Máy In Laser Trắng Đen Các Hãng | Trường Phát",
+    "description": "Bảng tra mã hộp mực cho máy in laser trắng đen HP, Canon, Brother, Samsung, Xerox. Chọn đúng mã mực cho máy của bạn, nạp mực tận nơi gọi 0908.327.123."
+  },
+  "bom-muc-may-in-tan-binh": {
+    "title": "Bơm Mực Máy In Tân Bình Tận Nơi 30 Phút | Trường Phát",
+    "description": "Bơm mực máy in tại Tân Bình tận nơi 24/7, kỹ thuật có mặt sau 30 phút, mực chất lượng cao, in test trước khi tính tiền. Gọi 0908.327.123 – Zalo cả 2 số."
+  },
+  "cac-loi-may-in-thuong-gap": {
+    "title": "Các Lỗi Máy In Thường Gặp Và Cách Khắc Phục | Trường Phát",
+    "description": "Tổng hợp các lỗi máy in thường gặp: kẹt giấy, in mờ, lem mực, báo đèn, không nhận lệnh in… kèm cách tự xử lý tại nhà. Cần thợ tận nơi gọi 0908.327.123."
+  },
+  "cac-loi-thuong-gap-cua-may-ricoh-mp-5500-mp6500-mp-7500-mp600-mp700mp-8000": {
+    "title": "Mã Lỗi Ricoh MP 5500, 6500, 7500, 6000, 7000, 8000 | Trường Phát",
+    "description": "Bảng mã lỗi SC máy photocopy Ricoh MP 5500, MP 6500, MP 7500, MP 6000, MP 7000, MP 8000: nguyên nhân và hướng khắc phục từng lỗi. Sửa tận nơi: 0908.327.123."
+  },
+  "cac-van-de-thuong-gap-trong-in-an-va-cach-khac-phuc": {
+    "title": "Các Vấn Đề Thường Gặp Khi In Ấn Và Cách Khắc Phục | Trường Phát",
+    "description": "Các vấn đề hay gặp khi in ấn – máy in không hoạt động, in quá chậm, tốn nhiều mực, kẹt giấy – và cách khắc phục nhanh. Cần thợ tận nơi gọi 0908.327.123."
+  },
+  "cach-cai-va-tai-driver-may-in-canon-2900-cho-win-7-32-bit": {
+    "title": "Cách Tải Và Cài Driver Máy In Canon 2900 Cho Win 7 | Trường Phát",
+    "description": "Hướng dẫn tải và cài driver máy in Canon LBP 2900 cho Windows 7 32-bit từng bước có hình minh hoạ. Cài không được? Gọi kỹ thuật tận nơi 0908.327.123."
+  },
+  "cach-dang-anh-len-instagram-bang-chrome": {
+    "title": "Cách Đăng Ảnh Lên Instagram Bằng Chrome Trên Máy Tính",
+    "description": "Hướng dẫn đăng ảnh lên Instagram ngay trên trình duyệt Chrome của máy tính, không cần điện thoại, chỉ vài bước đơn giản ai cũng làm được."
+  },
+  "cach-khac-phuc-nhung-loi-thong-dung-may-photocopy-toshiba": {
+    "title": "Cách Khắc Phục Lỗi Thông Dụng Máy Photocopy Toshiba",
+    "description": "Các lỗi thông dụng máy photocopy Toshiba: lỗi bộ phận sấy, dàn quang, mực thải, hệ thống laser, sọc màn hình và cách khắc phục. Sửa tận nơi: 0908.327.123."
+  },
+  "cach-su-dung-may-in-kim-epson-lq310-giai-phap-hieu-qua-cho-doanh-nghiep": {
+    "title": "Cách Sử Dụng Máy In Kim Epson LQ310 Đúng Cách | Trường Phát",
+    "description": "Hướng dẫn sử dụng máy in kim Epson LQ310: thay mực, lắp giấy đúng khớp xé, lưu ý khi in hoá đơn cho doanh nghiệp. Thay ruy băng tận nơi: 0908.327.123."
+  },
+  "cach-tat-windows-defender-tren-windows-10": {
+    "title": "Cách Tắt Windows Defender Trên Windows 10 Bằng Gpedit",
+    "description": "Hướng dẫn tắt Windows Defender trên Windows 10 bằng Group Policy (gpedit.msc) qua từng bước có hình, giúp cài phần mềm không bị chặn."
+  },
+  "chinh-sach-quy-dinh-chung": {
+    "title": "Chính Sách Bảo Hành & Quy Định Chung | Mực In Trường Phát",
+    "description": "Chính sách bảo hành, đổi trả, giao nhận và quy định chung khi sử dụng dịch vụ nạp mực, sửa máy in của Mực In Trường Phát tại TP.HCM."
+  },
+  "cho-thue-may-photocopy": {
+    "title": "Cho Thuê Máy Photocopy Giá Rẻ TP.HCM | Trường Phát",
+    "description": "Cho thuê máy photocopy in, scan, photo khổ A6–A3 cho doanh nghiệp, hộ kinh doanh tại TP.HCM, không tốn vốn mua máy. Tư vấn chọn gói: 0908.327.123."
+  },
+  "danh-sach-may-in-ho-tro-reset": {
+    "title": "Danh Sách Máy In Hỗ Trợ Reset Mực, Tràn Mực | Trường Phát",
+    "description": "Danh sách máy in Canon, Epson hỗ trợ reset lỗi tràn mực thải (Ink absorber full, Support Code 5B00), đèn cam vàng nháy đuổi. Hỗ trợ: 0908.327.123."
+  },
+  "dao-tao-ky-thuat-vien-muc-in": {
+    "title": "Đào Tạo Kỹ Thuật Viên Nạp Mực, Sửa Máy In | Trường Phát",
+    "description": "Chương trình đào tạo kỹ thuật viên nạp mực, sửa máy in học thực tế trên máy thật tại TP.HCM, không chỉ lý thuyết suông. Liên hệ 0908.327.123."
+  },
+  "giai-phap-khac-phuc-may-in-canon-bi-ket-giay": {
+    "title": "Máy In Canon Bị Kẹt Giấy: Nguyên Nhân & Cách Khắc Phục",
+    "description": "Máy in Canon bị kẹt giấy liên tục? Xem nguyên nhân thường gặp và cách lấy giấy kẹt an toàn, tránh hỏng rulo. Cần thợ tận nơi TP.HCM gọi 0908.327.123."
+  },
+  "giai-phap-khac-phuc-may-in-laser-bi-lem-muc": {
+    "title": "Máy In Laser Bị Lem Mực: Nguyên Nhân & Cách Khắc Phục",
+    "description": "Máy in laser bị lem mực, in ra chấm đen, vệt đen? Nguyên nhân từ hộp mực bẩn, gạt mực hỏng, trống mòn, lô sấy yếu và cách xử lý. Sửa tận nơi: 0908.327.123."
+  },
+  "gioi-thieu": {
+    "title": "Giới Thiệu Mực In Trường Phát – Nạp Mực Tận Nơi TP.HCM",
+    "description": "Mực In Trường Phát có nhiều điểm kỹ thuật tại Tân Bình, Bình Tân, Tân Phú, Quận 3, 5, 6, 10…, nạp mực và sửa máy in tận nơi trong 30 phút."
+  },
+  "he-thong-cac-diem-ky-thuat-bts": {
+    "title": "Hệ Thống Điểm Kỹ Thuật Nạp Mực TP.HCM | Trường Phát",
+    "description": "Danh sách điểm kỹ thuật và chi nhánh của Mực In Trường Phát trên các quận Tân Phú, Bình Tân… TP.HCM, giúp kỹ thuật có mặt nhanh. Hotline 0908.327.123."
+  },
+  "hop-muc-demo-hop-muc-starter-la-gi": {
+    "title": "Hộp Mực Demo, Hộp Mực Starter Là Gì? | Trường Phát",
+    "description": "Hộp mực demo (starter) là hộp mực đi kèm máy in mới, ít mực hơn hộp tiêu chuẩn. Tìm hiểu khác biệt, số trang in và khi nào nên nạp hoặc thay mới."
+  },
+  "hop-muc-zin-lk": {
+    "title": "Hộp Mực Zin Chính Hãng Giá Tốt TP.HCM | Trường Phát",
+    "description": "Hộp mực zin linh kiện bảo hành 12 tháng, tặng 3 lần nạp mực, phục vụ tận nơi 24/7 tại TP.HCM. Báo giá nhanh qua 0908.327.123 – Zalo."
+  },
+  "huong-dan-cai-win-10": {
+    "title": "Hướng Dẫn Cài Win 10 Bằng USB Chi Tiết Từ A-Z",
+    "description": "Hướng dẫn cài Windows 10 bằng USB chi tiết từng bước có hình: tạo USB boot, chọn ổ đĩa, cài đặt và thiết lập ban đầu. Cài tận nơi gọi 0908.327.123."
+  },
+  "huong-dan-phan-loai-camera-quan-sat": {
+    "title": "Hướng Dẫn Phân Loại Camera Quan Sát: Nên Chọn Loại Nào?",
+    "description": "Phân loại các loại camera quan sát phổ biến (không dây, IP, dome, thân…) và cách chọn loại phù hợp cho gia đình, siêu thị, công ty trước khi lắp đặt."
+  },
+  "huong-dan-su-dung-chuc-nang-chia-bo-dien-tu-may-photocopy-ricoh": {
+    "title": "Cách Dùng Chức Năng Chia Bộ Điện Tử Máy Photocopy Ricoh",
+    "description": "Hướng dẫn dùng chức năng chia bộ điện tử (Sort) trên máy photocopy Ricoh để chia bản sao thành từng bộ tài liệu tự động, tiết kiệm thời gian."
+  },
+  "lien-he": {
+    "title": "Liên Hệ Nạp Mực, Sửa Máy In Tận Nơi | Mực In Trường Phát",
+    "description": "Liên hệ Mực In Trường Phát: hotline 0908.327.123 – 0819.007.394 (Zalo), email icontactvina@gmail.com. Kỹ thuật có mặt tận nơi TP.HCM trong 30 phút."
+  },
+  "lua-chon-may-in-a4-hay-a3": {
+    "title": "Nên Chọn Máy In A4 Hay A3? So Sánh Ưu Nhược Điểm",
+    "description": "Nên mua máy in khổ A4 hay A3? So sánh chi phí, kích thước, nhu cầu in và loại máy phù hợp cho văn phòng, gia đình trước khi quyết định mua."
+  },
+  "may-in-brother-bao-replace-toner": {
+    "title": "Máy In Brother Báo Replace Toner: Cách Reset | Trường Phát",
+    "description": "Máy in Brother báo Replace Toner dù đã nạp mực? Hướng dẫn reset hộp mực Brother đơn giản tại nhà. Không làm được, gọi kỹ thuật tận nơi 0908.327.123."
+  },
+  "may-in-laser-cau-tao-tinh-nang-va-nguyen-tac-hoat-dong-cua-may": {
+    "title": "Máy In Laser: Cấu Tạo, Tính Năng Và Nguyên Lý Hoạt Động",
+    "description": "Máy in laser cấu tạo gồm những bộ phận nào, hoạt động theo nguyên lý xerography ra sao và có ưu điểm gì so với máy in phun. Giải thích dễ hiểu."
+  },
+  "may-in-mau-muc-nuoc-va-muc-bot-loai-nao-tiet-kiem-hon": {
+    "title": "Máy In Màu Mực Nước Hay Mực Bột Tiết Kiệm Hơn?",
+    "description": "So sánh máy in màu mực nước (in phun) và mực bột (laser màu): giá máy, chi phí mỗi trang, chất lượng in. Chọn loại tiết kiệm hơn cho nhu cầu của bạn."
+  },
+  "may-in-phun-va-cau-tao-cua-may-nhu-the-nao": {
+    "title": "Máy In Phun Là Gì? Cấu Tạo Và Nguyên Lý Hoạt Động",
+    "description": "Máy in phun cấu tạo gồm đầu phun, hộp mực, bộ kéo giấy… và tạo ảnh bằng cách phun giọt mực lên giấy. Tìm hiểu chi tiết cấu tạo và cách hoạt động."
+  },
+  "mua-may-in-cu-gia-cao": {
+    "title": "Thu Mua Máy In Cũ, Hư Hỏng Giá Cao TP.HCM | Trường Phát",
+    "description": "Thu mua máy in cũ, máy in hư, bể nát giá cao hơn bán ve chai tại TP.HCM. Định giá nhanh qua Zalo, đến tận nơi thu mua. Gọi 0908.327.123."
+  },
+  "muc-may-in-quan-12-hcm": {
+    "title": "Nạp Mực Máy In Tại Nhà Quận 12 Tận Nơi | Trường Phát",
+    "description": "Nạp mực máy in tại nhà Quận 12 TP.HCM, kỹ thuật có mặt nhanh, in test trước khi tính tiền, kiêm sửa máy tính, cài laptop. Gọi 0908.327.123."
+  },
+  "nap-muc-in-laser-quan-11-gia-re": {
+    "title": "Nạp Mực In Laser Quận 11 Giá Rẻ Tận Nơi | Trường Phát",
+    "description": "Nạp mực in laser Quận 11 giá rẻ, tận nơi trong 30 phút, kèm hướng dẫn cài wifi (SSID) cho máy in. In test trước khi tính tiền. Gọi 0908.327.123."
+  },
+  "nap-muc-in-laser-quan-tan-phu-cuc-nhanh-24-7": {
+    "title": "Nạp Mực In Laser Quận Tân Phú Nhanh 24/7 | Trường Phát",
+    "description": "Nạp mực in laser Tân Phú 24/7, có mặt nhanh, kèm cách khắc phục lỗi bản in mờ tại nhà. In test trước khi tính tiền, bảo hành 1 tháng: 0908.327.123."
+  },
+  "nap-muc-in-laser-tan-binh-gia-re": {
+    "title": "Nạp Mực In Laser Tân Bình Giá Rẻ Tận Nơi | Trường Phát",
+    "description": "Nạp mực in laser Tân Bình giá rẻ, kỹ thuật có mặt trong 30 phút, kèm hướng dẫn vệ sinh đầu phun máy in. In test trước khi tính tiền: 0908.327.123."
+  },
+  "nap-muc-may-in-brother": {
+    "title": "Nạp Mực Máy In Brother Tận Nơi TP.HCM | Trường Phát",
+    "description": "Nạp mực máy in Brother tận nơi TP.HCM, có mặt sau 30 phút, mực chống bám dính cho bản in sắc nét đến hết hộp, tiết kiệm chi phí. Gọi 0908.327.123."
+  },
+  "nap-muc-may-in-laser-mau": {
+    "title": "Nạp Mực Máy In Laser Màu Tận Nơi TPHCM | Trường Phát",
+    "description": "Nạp mực máy in laser màu tận nơi TP.HCM giá rẻ, có mặt sau 30 phút. Báo giá đổ mực laser màu HP, Canon, Brother theo từng màu. Gọi 0908.327.123."
+  },
+  "nap-muc-may-photocopy-ricoh-sp201": {
+    "title": "Nạp Mực Máy In Ricoh SP 201 Tận Nơi | Trường Phát",
+    "description": "Nạp mực máy in Ricoh SP 201 (hộp mực 407255) tận nơi TP.HCM, mực bột chất lượng, giá tiết kiệm. Kỹ thuật có mặt nhanh, gọi 0908.327.123 – Zalo."
+  },
+  "nhung-uu-nhuoc-diem-cua-may-in-laser-va-may-in-phun-ban-can-biet": {
+    "title": "Ưu Nhược Điểm Máy In Laser Và Máy In Phun Bạn Cần Biết",
+    "description": "So sánh ưu nhược điểm máy in laser và máy in phun về tốc độ, chất lượng ảnh, chi phí mực, độ bền để chọn đúng máy cho văn phòng hay gia đình."
+  },
+  "pin-cmos-la-gi-het-pin-cmos-may-tinh-co-hoat-dong-binh-thuong-hay-khong-cach-thay-pin-cmos": {
+    "title": "Pin CMOS Là Gì? Hết Pin CMOS Máy Tính Có Sao Không?",
+    "description": "Pin CMOS là gì, hết pin CMOS máy tính còn chạy bình thường không, dấu hiệu sai giờ, khởi động lỗi và cách thay pin CMOS cho PC, laptop tại nhà."
+  },
+  "reset-canon-g1000-g2000-g3000-bao-loi-5b00-tran-muc-thai": {
+    "title": "Reset Canon G1000, G2000, G3000 Lỗi 5B00 Tràn Mực Thải",
+    "description": "Cách reset máy in Canon G1000, G2000, G3000 báo lỗi 5B00, nháy đèn cam do tràn mực thải. Hỗ trợ reset tận nơi hoặc từ xa: gọi 0908.327.123."
+  },
+  "reset-may-in-xerox-p115-bao-den-do": {
+    "title": "Reset Máy In Xerox P115 Báo Đèn Đỏ, Không In | Trường Phát",
+    "description": "Máy in Xerox P115 báo đèn đỏ, đèn vàng nháy liên tục dù đã đổ mực? Nguyên nhân do chip hộp mực và cách reset. Hỗ trợ tận nơi: 0908.327.123."
+  },
+  "reset-muc-may-in-hp-107-135-137-vinh-vien-don-gian": {
+    "title": "Reset Mực Máy In HP 107, 135, 137 Vĩnh Viễn Đơn Giản",
+    "description": "Cách reset mực máy in HP 107A, 107W, 135, 137 dùng hộp mực 107A có chip, in tiếp sau khi nạp mực mà không cần thay chip. Hỗ trợ: 0908.327.123."
+  },
+  "ruy-bang-may-in-kim-epson-la-gi": {
+    "title": "Ruy Băng Máy In Kim Epson Là Gì? Cách Chọn Đúng Loại",
+    "description": "Ruy băng máy in kim Epson là gì, cách thay ruy băng an toàn, lưu ý khi lắp và bảng giá thay mực máy in hoá đơn. Thay tận nơi TP.HCM: 0908.327.123."
+  },
+  "sua-loi-print-spooler-service-not-runing-voi-microsoftfixit50126-msi": {
+    "title": "Sửa Lỗi Print Spooler Service Not Running Trên Windows",
+    "description": "Hướng dẫn sửa lỗi Print Spooler Service Not Running khi máy tính không in được, dùng công cụ microsoftfixit50126.msi và khởi động lại dịch vụ in."
+  },
+  "sua-may-in-bill": {
+    "title": "Sửa Máy In Bill Tận Nơi: Không In, Kẹt Giấy | Trường Phát",
+    "description": "Sửa máy in bill tận nơi cho cửa hàng, quán ăn, siêu thị tại TP.HCM: khắc phục nhanh lỗi không in, kẹt giấy, in mờ. Gọi 0908.327.123 – Zalo."
+  },
+  "sua-may-in-bill-khong-in-nhanh-chong": {
+    "title": "Sửa Máy In Bill Không In Hoá Đơn Nhanh | Trường Phát",
+    "description": "Máy in bill bấm in nhưng không ra hoá đơn, chạy giấy trắng hoặc phần mềm bán hàng không nhận máy? Nguyên nhân và cách sửa nhanh: 0908.327.123."
+  },
+  "sua-may-photocopy": {
+    "title": "Sửa Máy Photocopy Tận Nơi TP.HCM | Mực In Trường Phát",
+    "description": "Sửa máy photocopy Toshiba, Ricoh, Sharp, Canon tận nơi Tân Bình, Tân Phú, Bình Tân và các quận TP.HCM. Kỹ thuật có mặt nhanh: 0908.327.123."
+  },
+  "thay-muc-may-in-tan-binh": {
+    "title": "Thay Mực Máy In Tân Bình Giá Rẻ Tận Nơi | Trường Phát",
+    "description": "Thay mực máy in tại Tân Bình giá phải chăng, mực đẹp, kỹ thuật có mặt trong 30 phút, in test trước khi tính tiền. Gọi 0908.327.123 – Zalo."
+  },
+  "thay-ruy-bang-may-in-kim-epson-lq310-lq300-lq2190-gia-re-tan-noi-nhanh-chong": {
+    "title": "Thay Ruy Băng Máy In Kim Epson LQ310, LQ300, LQ2190",
+    "description": "Thay ruy băng máy in kim Epson LQ310, LQ300, LQ2190 giá rẻ tận nơi TP.HCM, ruy băng chất lượng cho hoá đơn rõ nét. Gọi 0908.327.123 – Zalo."
+  },
+  "toner-trong-may-in-la-gi-khac-nhau-toner-cartridge-va-ink-cartridge": {
+    "title": "Toner Là Gì? Khác Nhau Giữa Toner Cartridge Và Ink Cartridge",
+    "description": "Toner trong máy in là gì và khác ink cartridge thế nào? Giải thích mực bột của máy laser và mực nước của máy in phun để chọn và nạp đúng loại."
+  },
+  "tren-tay-may-in-mong-tu-dong-o2nail-gon-nhe-de-dung-in-nhanh-hinh-dep": {
+    "title": "Trên Tay Máy In Móng Tự Động O2Nail: Gọn, Nhanh, Đẹp",
+    "description": "Trải nghiệm máy in móng tự động O2Nail: thiết kế gọn nhẹ, dễ dùng, in hình lên móng nhanh và đẹp tại nhà, không cần ra tiệm làm móng."
+  },
+  "uu-va-nhuoc-diem-cua-may-in-kim": {
+    "title": "Ưu Và Nhược Điểm Của Máy In Kim | Mực In Trường Phát",
+    "description": "Máy in kim in hoá đơn nhiều liên, bền và rẻ mực nhưng ồn và chậm. Tìm hiểu ưu nhược điểm máy in kim Epson trước khi mua cho văn phòng, kế toán."
+  }
+}

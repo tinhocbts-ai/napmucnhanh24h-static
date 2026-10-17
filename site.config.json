@@ -15,6 +15,7 @@
   "email": "icontactvina@gmail.com",
 
   "addressFull": "TP. Hồ Chí Minh (phục vụ tận nơi toàn bộ 24 quận huyện)",
-  "openingHours": "Mo-Su 07:00-21:00",
+  "openingHours": "Mo-Su 00:00-23:59",
+  "openingHoursNote": "Dinh dang 'Mo-Su HH:MM-HH:MM'. Dang de 24/7 cho khop noi dung cac trang — doi o day neu gio that khac.",
   "priceFrom": "90.000đ"
 }
