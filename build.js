@@ -33,8 +33,15 @@ for (const p of pages) {
   const o = overrides[p.slug];
   if (o && o.title) p.title = o.title;
   if (o && o.description) p.description = o.description;
-  // title qua dai (> 65 ky tu) -> bo hau to thuong hieu
-  if ([...p.title].length > 65 && p.title.endsWith(BRAND_SUFFIX)) p.title = p.title.slice(0, -BRAND_SUFFIX.length);
+  // hau to "| Truong Phat" -> ten day du "| Muc In Truong Phat"; qua 65 ky tu thi bo hau to
+  if (p.title.endsWith(BRAND_SUFFIX)) {
+    const base = p.title.slice(0, -BRAND_SUFFIX.length);
+    const full = base + ' | ' + cfg.brand;
+    p.title = [...full].length <= 65 ? full : base;
+  }
+  if ([...p.title].length > 65 && p.title.endsWith(' | ' + cfg.brand)) p.title = p.title.slice(0, -(' | ' + cfg.brand).length);
+  // ten thuong hieu viet tat trong title/mo ta -> ten day du
+  p.description = (p.description || '').replace(/(?<!Mực In |mực in |MỰC IN )Trường Phát/g, cfg.brand);
 }
 
 const DISTRICTS = {
@@ -52,10 +59,20 @@ const DISTRICTS = {
   'nap-muc-may-in-quan-binh-tan': 'Bình Tân',
   'nap-muc-may-in-quan-binh-thanh': 'Bình Thạnh',
   'nap-muc-may-in-quan-tan-binh-24-7': 'Tân Bình',
-  'nap-muc-may-in-quan-tan-phu-192-22-phu-tho-hoa-tan-phu': 'Tân Phú',
+  'nap-muc-may-in-quan-tan-phu': 'Tân Phú',
   'nap-muc-may-in-phu-nhuan': 'Phú Nhuận',
   'nap-muc-may-in-binh-chanh-uy-tin-nhanh-re': 'Bình Chánh'
 };
+// Trang trung: giu URL (GitHub Pages khong co 301), canonical + link noi bo ve trang chinh, bo khoi sitemap
+const MERGED = {
+  'nap-muc-may-in-quan-tan-phu-192-22-phu-tho-hoa-tan-phu': 'nap-muc-may-in-quan-tan-phu',
+  'nap-muc-in-laser-quan-tan-phu-cuc-nhanh-24-7': 'nap-muc-may-in-quan-tan-phu',
+  'nap-muc-in-laser-tan-binh-gia-re': 'nap-muc-may-in-quan-tan-binh-24-7',
+  'nap-muc-in-laser-quan-11-gia-re': 'nap-muc-may-in-quan-11'
+};
+const isMerged = slug => Object.prototype.hasOwnProperty.call(MERGED, slug);
+const retargetMerged = html => html.replace(/href="([^"]*?)([a-z0-9-]+)\/"/g,
+  (m, pre, slug) => isMerged(slug) ? 'href="' + pre + MERGED[slug] + '/"' : m);
 const KIENTHUC = 'kien-thuc';
 const known = new Set(pages.map(p => p.slug).concat([KIENTHUC]));
 const isDistrict = slug => Object.prototype.hasOwnProperty.call(DISTRICTS, slug) ||
@@ -189,6 +206,61 @@ function localize(html, root, altBase) {
   return html;
 }
 
+// --- Thong nhat NAP: chi 1 thuong hieu (Truong Phat) + 2 hotline dang dung ---
+// Bai WP cu con ten thuong hieu khac (iNNO, Vmax, Nam Phong...) va so may ban / fax / so phu.
+const SP = '(?:\\s|&nbsp;)*';
+const OTHER_NUM = '(?:\\(?028\\)?[\\s.]*6271[\\s.]*1252|62711252|' +
+  '0931[\\s.]?867[\\s.]?301|0909[\\s.]?007[\\s.]?800|028[\\s.]*225[\\s.]*347[\\s.]*46)';
+const SEP = SP + '(?:–|&#8211;|-|·|📞)' + SP;
+function normalizeNap(html) {
+  const hot = cfg.hotlineDisplay, tel = cfg.hotlineTel;
+  const BR = cfg.brand, BR_UP = cfg.brand.toUpperCase();
+  html = html
+    // ten cong ty / trung tam cu -> "Muc In Truong Phat"
+    .replace(/(?:TRUNG TÂM MỰC IN (?:INNO|TRƯỜNG PHÁT)\s+TRỰC THUỘC\s+)?CÔNG TY TNHH (?:DV|DỊCH VỤ) TIN HỌC BTS/g, BR_UP)
+    .replace(/(?:TRUNG TÂM|CÔNG TY) MỰC IN (?:INNO|TRƯỜNG PHÁT)/g, BR_UP)
+    .replace(/(?:\s|&nbsp;)*(?:trực\s+)?thuộc\s+(?:công ty|cty)[^.<]{0,40}?BTS/gi, '')
+    .replace(/(?:Công ty|Cty) (?:TNHH )?(?:Dịch vụ |DV |DVTH )?(?:Tin học )?BTS/gi, BR)
+    .replace(/\bNapmucnhanh24h\b(?!\.)/g, BR)
+    .replace(/(?:Trung [Tt]âm|Công ty) [Mm]ực [Ii]n (?:TRƯỜNG PHÁT|Trường Phát)/g, BR)
+    .replace(/(Trung tâm mực in|Mực in|Tin Học)\s+(iNNO|INNO|Nam Phong)/gi, BR)
+    .replace(/\b(iNNO|INNO|Vmax)\b/g, BR)
+    .replace(/\bNapmucnhanh24h\.com\b/g, BR)
+    .replace(/hiện có chi nhánh con mực in Thanh Phong, mực in TS, (?:<a[^>]*>)?mực in Hưng Thịnh(?:<\/a>)?/g,
+      'hiện có các điểm kỹ thuật tại:')
+    // "Truong Phat" viet tat -> ten day du (bo qua cho da co "Muc In" dung truoc)
+    .replace(/Mực in Trường Phát/g, BR)
+    .replace(/(?<!Mực In |mực in |MỰC IN )Trường Phát/g, BR)
+    .replace(/(?<!MỰC IN |Mực In )TRƯỜNG PHÁT/g, BR_UP)
+    // "Muc In <strong>Truong Phat</strong>" bi gan them lan nua -> bo phan lap
+    .replace(/(Mực In|mực in|MỰC IN)((?:\s|&nbsp;|<[^>]+>)+)(?:Mực In Trường Phát|MỰC IN TRƯỜNG PHÁT)/g, (m, a, gap) => (a === 'MỰC IN' ? 'MỰC IN' : 'Mực In') + gap + (a === 'MỰC IN' ? 'TRƯỜNG PHÁT' : 'Trường Phát'))
+    .replace(/mực in Trường Phát/g, BR)
+    // web / email phu cua cong ty cu
+    .replace(/(?:\s|&nbsp;)*(?:<a[^>]*>)?(?:https?:\/\/)?www\.tinhocbts\.com\/?(?:<\/a>)?/g, '')
+    .replace(/(<a[^>]*href="mailto:)tinhocbts@gmail\.com("[^>]*>)tinhocbts@gmail\.com/g, '$1' + cfg.email + '$2' + cfg.email)
+    .replace(/tinhocbts@gmail\.com/g, cfg.email);
+  // link tel: toi so khac: bo ca cum "· <a>so</a>" di sau hotline, con lai doi ve hotline
+  html = html.replace(new RegExp(SEP + '<a[^>]*href="tel:' + OTHER_NUM + '"[^>]*>[^<]*<\\/a>', 'g'), '');
+  html = html.replace(new RegExp('<a([^>]*)href="tel:' + OTHER_NUM + '"([^>]*)>[^<]*<\\/a>', 'g'),
+    '<a$1href="tel:' + tel + '"$2>' + hot + '</a>');
+  // dong co nhan: "Hotline 2: ...", "ĐT: ...", "Tel : 028...", "Fax : ...", "Cố định: ..."
+  html = html.replace(new RegExp('(?:' + SEP + ')?(?:<strong>)?(?:Hotline' + SP + '2|ĐT|Tel|Cố định|Fax)' + SP + '(?:<\\/strong>)?' + SP + ':' + SP +
+    '(?:<\\/strong>)?' + SP + OTHER_NUM + '(?:' + SP + '\\(Zalo · Telegram\\)|' + SP + '\\(Zalo\\))?', 'gi'), '');
+  // so phu dung sau hotline ("0908327123 – 0931867301") -> bo
+  html = html.replace(new RegExp(SEP + OTHER_NUM, 'g'), '');
+  // con sot -> doi ve hotline
+  html = html.replace(new RegExp(OTHER_NUM, 'g'), hot);
+  // gop so trung sau khi doi: "Hotline 2: <hotline>", "Tel : <hotline>" ngay sau hotline, "📞 X 📞 X"
+  const HOT = '0908[\\s.]?327[\\s.]?123';
+  const T = '(?:<[^>]+>|\\s|&nbsp;)*';
+  const NUM = '(?:<a[^>]*>)?' + HOT + '(?:<\\/a>)?';
+  const TAIL = '(?:' + SP + '\\((?:Zalo · Telegram|Zalo)\\))?';
+  html = html.replace(new RegExp('(?:' + SEP + ')?' + T + '(?:Hotline' + SP + '2|Cố định)' + T + ':?' + T + NUM + TAIL, 'g'), '');
+  html = html.replace(new RegExp('(' + HOT + '(?:(?!' + HOT + ')[\\s\\S]){0,160}?)(?:' + SEP + ')?' + T + '(?:Tel|ĐT)' + T + ':' + T + NUM, 'g'), '$1');
+  html = html.replace(new RegExp('(' + NUM + ')(?:' + T + '(?:–|&#8211;|·|📞)?' + T + NUM + ')+', 'g'), '$1');
+  return html;
+}
+
 function decodeEntities(s) {
   return s.replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&#8211;/g, '–').replace(/&#(\d+);/g, (m, c) => String.fromCodePoint(+c));
 }
@@ -220,7 +292,8 @@ function layout(o) {
   const root = rootFor(o.slug);
   o.description = clampDesc(o.description);
   const esc = s => (s || '').replace(/"/g, '&quot;');
-  const canonical = NOINDEX ? '' : '\n  <link rel="canonical" href="' + cfg.siteUrl + '/' + (o.slug ? o.slug + '/' : '') + '">';
+  const canonSlug = MERGED[o.slug] || o.slug;
+  const canonical = NOINDEX ? '' : '\n  <link rel="canonical" href="' + cfg.siteUrl + '/' + (canonSlug ? canonSlug + '/' : '') + '">';
   const robots = NOINDEX ? '\n  <meta name="robots" content="noindex,nofollow">' : '';
   const schemas = [].concat(o.schema || []).filter(Boolean);
   const ld = schemas.length ? '\n' + schemas.map(s => '<script type="application/ld+json">' + JSON.stringify(s) + '</script>').join('\n') : '';
@@ -244,7 +317,7 @@ function layout(o) {
     '  <link rel="icon" href="' + root + 'assets/img/favicon-32.png" sizes="32x32" type="image/png">\n' +
     '  <link rel="apple-touch-icon" href="' + root + 'assets/img/apple-touch-icon.png">\n' +
     '  <link rel="stylesheet" href="' + root + 'assets/css/style.css">\n</head>\n<body>\n' +
-    tpl(headerTpl, root).replace('{{NAV}}', buildNav(root)) + '\n<main class="wrap">\n' + o.bodyHtml + '\n</main>\n' +
+    tpl(headerTpl, root).replace('{{NAV}}', buildNav(root)) + '\n<main class="wrap">\n' + retargetMerged(o.bodyHtml) + '\n</main>\n' +
     tpl(footerTpl, root).replace('{{DISTRICT_LINKS}}', districtLinks(root)) + ld + '\n</body>\n</html>\n';
 }
 
@@ -261,7 +334,7 @@ const dayKeys = Object.keys(DAY);
 const [d0, d1] = ohDays.split('-');
 const BUSINESS = {
   '@context': 'https://schema.org', '@type': 'LocalBusiness', '@id': cfg.siteUrl + '/#business',
-  name: cfg.brand, alternateName: 'Nạp Mực Nhanh 24h', description: cfg.tagline, url: cfg.siteUrl + '/',
+  name: cfg.brand, description: cfg.tagline, url: cfg.siteUrl + '/',
   logo: cfg.siteUrl + '/assets/img/logo-512.png', image: DEFAULT_OG,
   telephone: ['+84' + cfg.hotlineTel.slice(1), '+84' + cfg.hotline2Tel.slice(1)], email: cfg.email,
   address: { '@type': 'PostalAddress', addressLocality: 'Thành phố Hồ Chí Minh', addressRegion: 'Hồ Chí Minh', addressCountry: 'VN' },
@@ -287,7 +360,7 @@ const h1Of = slug => { const p = pages.find(x => x.slug === slug); return p ? (p
 const STOP = new Set(['may', 'in', 'cua', 'va', 'la', 'gi', 'cho', 'cach', 'nhu', 'the', 'nao', 'co', 'khong', 'bi', 'gia', 're', 'nhanh', 'chong', 'tan', 'noi', 'hcm', 'tphcm', 'quan', '24', '7', 'uy', 'tin', 'ban', 'can', 'biet', 'nhat', 'don', 'gian', 'vinh', 'vien']);
 const NO_RELATED = new Set(['lien-he', 'chinh-sach-quy-dinh-chung', KIENTHUC]);
 const words = slug => new Set(slug.split('-').filter(w => !STOP.has(w) && !/^\d+$/.test(w) || /^(mau|kim|laser|phun|bill)$/.test(w)));
-const relPool = pages.filter(p => p.slug && !NO_RELATED.has(p.slug));
+const relPool = pages.filter(p => p.slug && !NO_RELATED.has(p.slug) && !isMerged(p.slug));
 const chosenCount = new Map(relPool.map(p => [p.slug, 0]));
 const related = new Map();
 for (const p of relPool) {
@@ -304,7 +377,7 @@ for (const p of relPool) {
 let count = 0;
 for (const p of pages) {
   const root = rootFor(p.slug);
-  let body = localize(p.html, root, p.h1 || p.title);
+  let body = normalizeNap(localize(p.html, root, p.h1 || p.title));
 
   if (!p.slug) {
     const hero = '<section class="hero">\n  <h1>' + p.h1 + '</h1>\n  <p>' + p.description + '</p>\n' +
@@ -321,10 +394,10 @@ for (const p of pages) {
       ['bang-gia-nap-muc-may-photo', 'Bảng giá nạp mực'], ['nap-muc-may-in-laser-mau', 'Nạp mực laser màu'],
       ['hop-muc-zin-lk', 'Hộp mực Zin chính hãng'], ['mua-may-in-cu-gia-cao', 'Mua máy in cũ giá cao'],
       ['cho-thue-may-photocopy', 'Cho thuê máy photocopy'], ['danh-sach-may-in-ho-tro-reset', 'Máy in hỗ trợ reset']].filter(([s]) => known.has(s));
-    const svcHtml = '<h2>Dịch vụ khác của Trường Phát</h2>\n<ul class="district-grid">\n' +
+    const svcHtml = '<h2>Dịch vụ khác của ' + cfg.brand + '</h2>\n<ul class="district-grid">\n' +
       svc.map(([s, n]) => '<li><a href="' + s + '/">' + n + '</a></li>').join('\n') + '\n</ul>';
     // Kien thuc moi
-    const postList = pages.filter(p => p.type === 'post').slice(0, 8);
+    const postList = pages.filter(p => p.type === 'post' && !isMerged(p.slug)).slice(0, 8);
     const ktHtml = '<h2>Kiến thức &amp; thủ thuật máy in</h2>\n<ul class="post-list">\n' +
       postList.map(p => '<li><a href="' + p.slug + '/">' + p.title + '</a></li>').join('\n') +
       '\n</ul>\n<p style="margin-top:6px"><a class="btn btn-ghost" href="' + KIENTHUC + '/">Xem tất cả bài viết →</a></p>';
@@ -360,7 +433,7 @@ for (const p of pages) {
   const schemaList = [];
   if (!p.slug) schemaList.push(BUSINESS, {
     '@context': 'https://schema.org', '@type': 'WebSite', '@id': cfg.siteUrl + '/#website', name: cfg.brand,
-    alternateName: 'Nạp Mực Nhanh 24h', url: cfg.siteUrl + '/', inLanguage: 'vi', publisher: BUSINESS_REF
+    url: cfg.siteUrl + '/', inLanguage: 'vi', publisher: BUSINESS_REF
   });
   else if (p.schema && p.schema['@type'] === 'Service') schemaList.push(Object.assign({}, p.schema, { url, provider: BUSINESS_REF }));
   else if (p.type === 'post') {
@@ -405,7 +478,7 @@ for (const p of pages) {
 }
 
 // --- trang muc luc Kien thuc (liet ke bai blog) ---
-const posts = pages.filter(p => p.type === 'post');
+const posts = pages.filter(p => p.type === 'post' && !isMerged(p.slug));
 const ktBody = '<h1>Kiến thức &amp; thủ thuật máy in</h1>\n' +
   '<p>Tổng hợp hướng dẫn xử lý lỗi, reset mực, mẹo dùng máy in – photocopy từ kỹ thuật ' + cfg.brand + '.</p>\n' +
   '<ul class="post-list">\n' +
@@ -436,7 +509,7 @@ write(path.join(ROOT, '404.html'), layout({
 
 // --- sitemap + robots ---
 const today = new Date().toISOString().slice(0, 10);
-const allSlugs = pages.map(p => p.slug).concat([KIENTHUC]);
+const allSlugs = pages.map(p => p.slug).filter(s => !isMerged(s)).concat([KIENTHUC]);
 write(path.join(ROOT, 'sitemap.xml'),
   '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
   allSlugs.map(s => '  <url><loc>' + cfg.siteUrl + '/' + (s ? s + '/' : '') + '</loc><lastmod>' + today + '</lastmod></url>').join('\n') +
