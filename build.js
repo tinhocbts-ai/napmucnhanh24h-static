@@ -73,6 +73,16 @@ const MERGED = {
 const isMerged = slug => Object.prototype.hasOwnProperty.call(MERGED, slug);
 const retargetMerged = html => html.replace(/href="([^"]*?)([a-z0-9-]+)\/"/g,
   (m, pre, slug) => isMerged(slug) ? 'href="' + pre + MERGED[slug] + '/"' : m);
+// Bai lac de (khong lien quan may in): giu URL cho khach doc, nhung noindex + bo khoi sitemap,
+// khong dua vao "Bai viet lien quan" / trang chu, de Google tap trung vao chu de may in.
+const OFFTOPIC = new Set([
+  'cach-dang-anh-len-instagram-bang-chrome',
+  'cach-tat-windows-defender-tren-windows-10',
+  'huong-dan-cai-win-10',
+  'huong-dan-phan-loai-camera-quan-sat',
+  'pin-cmos-la-gi-het-pin-cmos-may-tinh-co-hoat-dong-binh-thuong-hay-khong-cach-thay-pin-cmos',
+  'tren-tay-may-in-mong-tu-dong-o2nail-gon-nhe-de-dung-in-nhanh-hinh-dep'
+]);
 const KIENTHUC = 'kien-thuc';
 const known = new Set(pages.map(p => p.slug).concat([KIENTHUC]));
 const isDistrict = slug => Object.prototype.hasOwnProperty.call(DISTRICTS, slug) ||
@@ -294,7 +304,8 @@ function layout(o) {
   const esc = s => (s || '').replace(/"/g, '&quot;');
   const canonSlug = MERGED[o.slug] || o.slug;
   const canonical = NOINDEX ? '' : '\n  <link rel="canonical" href="' + cfg.siteUrl + '/' + (canonSlug ? canonSlug + '/' : '') + '">';
-  const robots = NOINDEX ? '\n  <meta name="robots" content="noindex,nofollow">' : '';
+  const robots = NOINDEX ? '\n  <meta name="robots" content="noindex,nofollow">'
+    : OFFTOPIC.has(o.slug) ? '\n  <meta name="robots" content="noindex,follow">' : '';
   const schemas = [].concat(o.schema || []).filter(Boolean);
   const ld = schemas.length ? '\n' + schemas.map(s => '<script type="application/ld+json">' + JSON.stringify(s) + '</script>').join('\n') : '';
   const ogImg = o.ogImage || (cfg.siteUrl + '/assets/img/og-default.jpg');
@@ -360,7 +371,7 @@ const h1Of = slug => { const p = pages.find(x => x.slug === slug); return p ? (p
 const STOP = new Set(['may', 'in', 'cua', 'va', 'la', 'gi', 'cho', 'cach', 'nhu', 'the', 'nao', 'co', 'khong', 'bi', 'gia', 're', 'nhanh', 'chong', 'tan', 'noi', 'hcm', 'tphcm', 'quan', '24', '7', 'uy', 'tin', 'ban', 'can', 'biet', 'nhat', 'don', 'gian', 'vinh', 'vien']);
 const NO_RELATED = new Set(['lien-he', 'chinh-sach-quy-dinh-chung', KIENTHUC]);
 const words = slug => new Set(slug.split('-').filter(w => !STOP.has(w) && !/^\d+$/.test(w) || /^(mau|kim|laser|phun|bill)$/.test(w)));
-const relPool = pages.filter(p => p.slug && !NO_RELATED.has(p.slug) && !isMerged(p.slug));
+const relPool = pages.filter(p => p.slug && !NO_RELATED.has(p.slug) && !isMerged(p.slug) && !OFFTOPIC.has(p.slug));
 const chosenCount = new Map(relPool.map(p => [p.slug, 0]));
 const related = new Map();
 for (const p of relPool) {
@@ -372,6 +383,20 @@ for (const p of relPool) {
   }).sort((a, b) => b[1] - a[1]).slice(0, 4).map(([s]) => s);
   scored.forEach(s => chosenCount.set(s, chosenCount.get(s) + 1));
   related.set(p.slug, scored);
+}
+
+// --- lastmod that cua tung trang: chi doi ngay khi noi dung trang doi (data/lastmod.json) ---
+// Sitemap ma trang nao cung ghi ngay build thi Google bo qua lastmod.
+const today = new Date().toISOString().slice(0, 10);
+const lastmodFile = path.join(ROOT, 'data', 'lastmod.json');
+const lastmod = readJson('data/lastmod.json', {});
+const hashOf = s => require('crypto').createHash('sha1').update(s).digest('hex').slice(0, 12);
+function touch(slug, content) {
+  const h = hashOf(content), e = lastmod[slug];
+  if (!e) lastmod[slug] = { date: today, hash: h };
+  else if (!e.hash) e.hash = h;                       // lan dau: giu ngay da tinh tu lich su git
+  else if (e.hash !== h) { e.hash = h; e.date = today; }
+  return lastmod[slug].date;
 }
 
 let count = 0;
@@ -397,7 +422,7 @@ for (const p of pages) {
     const svcHtml = '<h2>Dịch vụ khác của ' + cfg.brand + '</h2>\n<ul class="district-grid">\n' +
       svc.map(([s, n]) => '<li><a href="' + s + '/">' + n + '</a></li>').join('\n') + '\n</ul>';
     // Kien thuc moi
-    const postList = pages.filter(p => p.type === 'post' && !isMerged(p.slug)).slice(0, 8);
+    const postList = pages.filter(p => p.type === 'post' && !isMerged(p.slug) && !OFFTOPIC.has(p.slug)).slice(0, 8);
     const ktHtml = '<h2>Kiến thức &amp; thủ thuật máy in</h2>\n<ul class="post-list">\n' +
       postList.map(p => '<li><a href="' + p.slug + '/">' + p.title + '</a></li>').join('\n') +
       '\n</ul>\n<p style="margin-top:6px"><a class="btn btn-ghost" href="' + KIENTHUC + '/">Xem tất cả bài viết →</a></p>';
@@ -423,6 +448,7 @@ for (const p of pages) {
       '\n</ul>\n</section>';
   }
   body = normalizeHeadings(body);
+  touch(p.slug, p.title + '\n' + p.description + '\n' + body);
 
   // og:image = anh dau tien trong bai (ban goc jpg/png, tuyet doi), else default
   const firstImg = (body.match(/<img[^>]+src="([^"]*assets\/img\/[^"]+)"/i) || [])[1];
@@ -508,11 +534,12 @@ write(path.join(ROOT, '404.html'), layout({
 }));
 
 // --- sitemap + robots ---
-const today = new Date().toISOString().slice(0, 10);
-const allSlugs = pages.map(p => p.slug).filter(s => !isMerged(s)).concat([KIENTHUC]);
+touch(KIENTHUC, ktBody);
+if (!NOINDEX) fs.writeFileSync(lastmodFile, JSON.stringify(lastmod, null, 1) + '\n');
+const allSlugs = pages.map(p => p.slug).filter(s => !isMerged(s) && !OFFTOPIC.has(s)).concat([KIENTHUC]);
 write(path.join(ROOT, 'sitemap.xml'),
   '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
-  allSlugs.map(s => '  <url><loc>' + cfg.siteUrl + '/' + (s ? s + '/' : '') + '</loc><lastmod>' + today + '</lastmod></url>').join('\n') +
+  allSlugs.map(s => '  <url><loc>' + cfg.siteUrl + '/' + (s ? s + '/' : '') + '</loc><lastmod>' + ((lastmod[s] || {}).date || today) + '</lastmod></url>').join('\n') +
   '\n</urlset>\n');
 write(path.join(ROOT, 'robots.txt'), NOINDEX
   ? 'User-agent: *\nDisallow: /\n'
