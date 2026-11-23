@@ -81,7 +81,10 @@ const OFFTOPIC = new Set([
   'huong-dan-cai-win-10',
   'huong-dan-phan-loai-camera-quan-sat',
   'pin-cmos-la-gi-het-pin-cmos-may-tinh-co-hoat-dong-binh-thuong-hay-khong-cach-thay-pin-cmos',
-  'tren-tay-may-in-mong-tu-dong-o2nail-gon-nhe-de-dung-in-nhanh-hinh-dep'
+  'tren-tay-may-in-mong-tu-dong-o2nail-gon-nhe-de-dung-in-nhanh-hinh-dep',
+  // 23/11/2026: shop KHONG lam may photocopy -> an 2 trang dich vu photocopy (cung co che).
+  'sua-may-photocopy',
+  'cho-thue-may-photocopy'
 ]);
 const KIENTHUC = 'kien-thuc';
 const known = new Set(pages.map(p => p.slug).concat([KIENTHUC]));
@@ -122,7 +125,6 @@ const NAV_GROUPS = [
   ] },
   { label: 'Sửa chữa', items: [
     ['sua-may-in-tan-noi-tphcm', 'Sửa máy in tận nơi'],
-    ['sua-may-photocopy', 'Sửa máy photocopy'],
     ['sua-may-in-bill', 'Sửa máy in bill'],
     ['cac-loi-may-in-thuong-gap', 'Các lỗi máy in thường gặp'],
     ['danh-sach-may-in-ho-tro-reset', 'Máy in hỗ trợ reset']
@@ -132,7 +134,6 @@ const NAV_GROUPS = [
     ['bom-muc-may-in-tan-binh', 'Bơm mực Tân Bình'],
     ['thay-muc-may-in-tan-binh', 'Thay mực Tân Bình'],
     ['mua-may-in-cu-gia-cao', 'Mua máy in cũ giá cao'],
-    ['cho-thue-may-photocopy', 'Cho thuê máy photocopy'],
     ['phan-biet-hop-muc-va-cum-drum', 'Phân biệt hộp mực & drum']
   ] }
 ];
@@ -415,10 +416,10 @@ for (const p of pages) {
         .map(([s, n]) => '<li><a href="' + s + '/">Nạp mực máy in ' + n + '</a></li>').join('\n') +
       '\n</ul>';
     // Dich vu khac
-    const svc = [['sua-may-in-tan-noi-tphcm', 'Sửa máy in tận nơi'], ['sua-may-photocopy', 'Sửa máy photocopy'],
+    const svc = [['sua-may-in-tan-noi-tphcm', 'Sửa máy in tận nơi'], ['sua-may-in-bill', 'Sửa máy in bill'],
       ['bang-gia-nap-muc-may-photo', 'Bảng giá nạp mực'], ['nap-muc-may-in-laser-mau', 'Nạp mực laser màu'],
       ['hop-muc-zin-lk', 'Hộp mực Zin chính hãng'], ['mua-may-in-cu-gia-cao', 'Mua máy in cũ giá cao'],
-      ['cho-thue-may-photocopy', 'Cho thuê máy photocopy'], ['danh-sach-may-in-ho-tro-reset', 'Máy in hỗ trợ reset']].filter(([s]) => known.has(s));
+      ['danh-sach-may-in-ho-tro-reset', 'Máy in hỗ trợ reset']].filter(([s]) => known.has(s));
     const svcHtml = '<h2>Dịch vụ khác của ' + cfg.brand + '</h2>\n<ul class="district-grid">\n' +
       svc.map(([s, n]) => '<li><a href="' + s + '/">' + n + '</a></li>').join('\n') + '\n</ul>';
     // Kien thuc moi
